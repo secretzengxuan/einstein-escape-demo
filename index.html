@@ -127,11 +127,15 @@ button:focus-visible,[data-scene-interactive]:focus-visible{outline:2px solid #e
 @keyframes einsteinPulse{0%,100%{filter:brightness(1.2) drop-shadow(0 0 5px rgba(200,168,58,.7))}50%{filter:brightness(1.3) drop-shadow(0 0 12px rgba(200,168,58,1))}}
 
 /* 对话框(课堂内) */
-.lecture-dialog{position:absolute;bottom:0;left:2%;right:2%;background:rgba(20,14,10,1);border:1px solid #4a3a2a;border-top:2px solid #5a4a2a;border-radius:10px 10px 0 0;padding:14px 18px;z-index:30;min-height:140px;max-height:39%;overflow-y:auto;transition:all .3s}
+.lecture-dialog{position:absolute;bottom:0;left:2%;right:2%;background:rgba(20,14,10,1);border:1px solid #4a3a2a;border-top:2px solid #5a4a2a;border-radius:10px 10px 0 0;padding:14px 18px;z-index:30;min-height:140px;max-height:39%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;transition:all .3s}
 .lecture-dialog .speaker{color:#c8a83a;font-size:13px;font-weight:bold;margin-bottom:6px;letter-spacing:1px}
 .lecture-dialog .context-text{font-size:13px;color:#9a8a7a;margin-bottom:6px;line-height:1.5;font-style:italic}
 .lecture-dialog .question-text{font-size:15px;color:#d4c5b5;margin-bottom:10px;line-height:1.7;font-weight:500}
 .lecture-dialog .response-text{font-size:15px;color:#d4c5b5;line-height:1.8;opacity:0;animation:respIn 0.8s ease forwards;white-space:pre-line}
+.lecture-dialog.reading-mode{display:flex;flex-direction:column;overflow:hidden}
+.lecture-dialog.reading-mode #lectureContent{display:flex;flex:1;min-height:0;flex-direction:column}
+.lecture-dialog.reading-mode .response-text{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding-right:6px}
+.lecture-dialog.reading-mode .choices{flex:none;margin-top:7px;padding-top:7px;border-top:1px solid rgba(90,74,58,.38);background:#140e0a}
 @keyframes respIn{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
 
 /* 选择按钮 */
@@ -397,6 +401,17 @@ button:focus-visible,[data-scene-interactive]:focus-visible{outline:2px solid #e
 .knowledge-entry.open .knowledge-entry-body{display:block}
 .panel-close-x{position:sticky;top:-14px;z-index:5;display:block;margin:-12px -14px -24px auto;width:36px;height:36px;border:1px solid #5a4a3a;border-radius:50%;background:rgba(27,20,16,.96);color:#b8a99a;font-size:21px;line-height:32px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.45)}
 .panel-close-x:hover{border-color:#8a7a6a;color:#e2d5c8}
+.info-btn{width:34px;padding-left:0;padding-right:0;font-size:15px}
+.author-info-panel{max-width:460px;border-color:#6a5a3a;text-align:center}
+.author-info-kicker{margin:4px 0 8px;color:#756655;font-size:10px;letter-spacing:4px}
+.author-info-panel h2{margin-bottom:18px}
+.author-info-card{padding:6px 16px;border:1px solid #443528;border-radius:8px;background:rgba(19,13,9,.72);text-align:left}
+.author-info-row{display:grid;grid-template-columns:74px minmax(0,1fr);gap:14px;align-items:center;padding:14px 2px;border-bottom:1px dashed rgba(90,74,58,.42);font-size:14px}
+.author-info-row:last-child{border-bottom:0}
+.author-info-label{color:#877765;letter-spacing:2px}
+.author-info-value{min-width:0;color:#d6c8b8;overflow-wrap:anywhere}
+.author-info-value a{color:#d8bd6c;text-decoration:none}
+.author-info-value a:hover{text-decoration:underline}
 
 /* 经验解锁提示 */
 .toast{position:fixed;bottom:10%;left:50%;transform:translateX(-50%);z-index:3600;background:#2d231c;border:1px solid #c8a83a;border-radius:10px;padding:12px 24px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateX(-50%) translateY(20px)}
@@ -890,6 +905,12 @@ body{align-items:flex-start;overflow-x:hidden}
 .intro-box{padding:30px 24px}
 .intro-box .story{font-size:17px}
 .toast{max-width:88vw;padding:10px 15px}
+.lecture-dialog{min-height:156px;max-height:46%;padding:10px 12px}
+.lecture-dialog .speaker{font-size:11px;margin-bottom:4px}
+.lecture-dialog .context-text{font-size:11px;line-height:1.45}
+.lecture-dialog .question-text{font-size:13px;line-height:1.55;margin-bottom:7px}
+.lecture-dialog .response-text{font-size:13px;line-height:1.65}
+.lecture-dialog .choice-btn{font-size:12px;padding:7px 10px}
 .l3-story-panel{width:95vw;min-height:280px;padding:36px 22px 28px}
 .l3-story-text{font-size:16px;line-height:1.85}
 .l3-story-kicker{margin-bottom:16px;letter-spacing:3px}
@@ -925,6 +946,7 @@ body{align-items:flex-start;overflow-x:hidden}
 .student{padding:8px;margin:-8px 6px}
 .student svg{flex:none}
 .keypad-btn,.ui-choice-btn,.btn-cancel,.say-continue-btn,.continue-btn{min-height:44px}
+.lecture-dialog.reading-mode .response-text{animation:none;opacity:1;transform:none}
 #l4WeakLamp{min-width:44px;min-height:56px;margin-left:-9px}
 }
 
@@ -941,9 +963,14 @@ body{align-items:flex-start;min-height:100svh;overflow-y:auto}
 避免出现人物叠在一起、对话框吞掉半个场景的“纵向压扁”。
 */
 .scene{height:clamp(360px,46vw,420px)}
-.lecture-scene{min-height:clamp(420px,50vw,460px)}
-.lecture-scene .students{height:30%;bottom:36%}
-.lecture-scene .lecture-dialog{max-height:36%}
+.lecture-scene{height:clamp(300px,calc(100svh - 73px),420px);min-height:clamp(300px,calc(100svh - 73px),420px)}
+.lecture-scene .students{height:26%;bottom:49%}
+.lecture-scene .lecture-dialog{height:clamp(180px,49svh,198px);min-height:180px;max-height:62%;padding:10px 14px}
+.lecture-dialog .speaker{font-size:11px;margin-bottom:4px}
+.lecture-dialog .context-text{font-size:11px;line-height:1.45}
+.lecture-dialog .question-text{font-size:12px;line-height:1.5;margin-bottom:7px}
+.lecture-dialog .response-text{font-size:12px;line-height:1.6}
+.lecture-dialog .choice-btn{font-size:11px;padding:6px 10px}
 .dialog-box{margin-top:7px;padding:11px 14px;font-size:13px;line-height:1.6}
 .modal,.knowledge-panel,.knowledge-modal{max-height:94svh;overflow-y:auto}
 .intro-box{padding:24px 32px}
@@ -959,7 +986,7 @@ body{align-items:flex-start;min-height:100svh;overflow-y:auto}
 <!-- 在线简历版使用等长 AAC 音乐，减小手机首次加载体积。 -->
 <audio id="bgmAudio" loop preload="auto" src="aimili.m4a"></audio>
 
-<script>window.__EINSTEIN_RELEASE__=true;</script>
+<script>window.__EINSTEIN_RELEASE__=true;window.__EINSTEIN_ALLOW_DEV_TOOLS__=true;</script>
 </head>
 <body>
 
@@ -999,7 +1026,7 @@ body{align-items:flex-start;min-height:100svh;overflow-y:auto}
 
 <div class="top-bar">
 <div class="title" id="levelTitle">✦ 爱因斯坦的密室</div>
-<div class="top-actions"><button class="bgm-btn" id="bgmBtn" onclick="toggleBGM()" aria-label="背景音乐">♩</button><button class="knowledge-btn" id="knowledgeBtn" onclick="toggleKnowledge()" style="display:none">▤ 知识</button><button class="knowledge-btn" onclick="toggleExperience()" style="border-color:#6a5a3a;color:#c8a83a">✦ 能力</button><button class="knowledge-btn" onclick="togglePersonality()" style="border-color:#4a6a5a;color:#8ac8a8">◇ 人格</button><button class="knowledge-btn" id="backpackBtn" onclick="toggleBackpack()" style="display:none;border-color:#5a4a3a;color:#d4c5b5">▣ 背包</button></div></div>
+<div class="top-actions"><button class="bgm-btn" id="bgmBtn" onclick="toggleBGM()" aria-label="背景音乐">♩</button><button class="knowledge-btn" id="knowledgeBtn" onclick="toggleKnowledge()" style="display:none">▤ 知识</button><button class="knowledge-btn" onclick="toggleExperience()" style="border-color:#6a5a3a;color:#c8a83a">✦ 能力</button><button class="knowledge-btn" onclick="togglePersonality()" style="border-color:#4a6a5a;color:#8ac8a8">◇ 人格</button><button class="knowledge-btn" id="backpackBtn" onclick="toggleBackpack()" style="display:none;border-color:#5a4a3a;color:#d4c5b5">▣ 背包</button><button class="knowledge-btn info-btn" id="infoBtn" onclick="toggleInfo()" aria-label="作品信息" title="作品信息">ⓘ</button></div></div>
 
 <!-- ===== 第零关:最后的课堂 ===== -->
 <div class="lecture-scene" id="lectureScene">
@@ -1431,6 +1458,18 @@ body{align-items:flex-start;min-height:100svh;overflow-y:auto}
 <div id="experienceEntries"></div>
 </div></div>
 
+<!-- ===== 作品信息 ===== -->
+<div class="knowledge-overlay" id="infoOverlay" onclick="if(event.target===this)closeInfo()">
+<div class="knowledge-panel author-info-panel">
+<button class="panel-close-x" onclick="closeInfo()" aria-label="关闭作品信息">×</button>
+<div class="author-info-kicker">EINSTEIN ESCAPE</div>
+<h2>ⓘ 作品信息</h2>
+<div class="author-info-card">
+<div class="author-info-row"><span class="author-info-label">作者</span><strong class="author-info-value">secret</strong></div>
+<div class="author-info-row"><span class="author-info-label">邮箱</span><span class="author-info-value"><a href="mailto:51274700011@stu.ecnu.edu.cn">51274700011@stu.ecnu.edu.cn</a></span></div>
+</div>
+</div></div>
+
 <!-- ===== 背包面板弹窗 ===== -->
 <div class="knowledge-overlay" id="backpackOverlay" onclick="if(event.target===this)closeBackpack()">
 <div class="knowledge-panel backpack-panel" style="border-color:#5a4a3a">
@@ -1480,6 +1519,7 @@ body{align-items:flex-start;min-height:100svh;overflow-y:auto}
 <script>
 // 发布构建会在本脚本之前注入 true；开发版默认保留内部跳关能力。
 var isReleaseBuild = window.__EINSTEIN_RELEASE__ === true;
+var devToolsEnabled = !isReleaseBuild || window.__EINSTEIN_ALLOW_DEV_TOOLS__ === true;
 
 var mobilePortraitAllowed = false;
 function isMobilePortraitViewport(){
@@ -2064,6 +2104,13 @@ if(!lec) return;
 if(on) lec.classList.add('speaking'); else lec.classList.remove('speaking');
 }
 
+function setLectureReadingMode(on){
+var dialog = document.getElementById('lectureDialog');
+if(!dialog) return;
+dialog.classList.toggle('reading-mode', !!on);
+dialog.scrollTop = 0;
+}
+
 function pickSpeakerForRound(){
 // 从未发言的学生里选;优先中前排(更显眼)
 var candidates = [];
@@ -2101,6 +2148,7 @@ if(idx >= lectureTotal){
 endLecture();
 return;
 }
+setLectureReadingMode(false);
 lectureRound = idx;
 lectureChosen = false;
 var d = lectureDialogues[idx];
@@ -2246,6 +2294,7 @@ if(s) document.getElementById('lectureSpeaker').textContent = '🎓 '+s.name+'(�
 function showLectureResponse(dialogueIdx, optIdx){
 var d = lectureDialogues[dialogueIdx];
 var resp = d.options[optIdx];
+setLectureReadingMode(true);
 if(dialogueIdx===0) unlockExperience('lightcone');
 if(dialogueIdx===1){
 if(optIdx===0) unlockPersonality('brave_soul');
@@ -2293,6 +2342,7 @@ showPhysicsExperiencePage(0);
 }
 
 function showPhysicsExperiencePage(page){
+setLectureReadingMode(true);
 var pages = [
 '我最后看了一眼窗外。\n\n<em>「刚才的距离不是凭空猜出来的。」</em>\n\n见过人的步幅、街道的宽度、树木与建筑的尺度，再把它们同眼前的角度比较——许多物理量会从长期观察中浮现。',
 '经验不会替我完成推理，却能在没有尺、没有表、没有仪器的时候，给我一个可信的量级。\n\n<em style="color:#c8a83a">先观察，再估计，然后计算。需要的时候，那些熟悉的数字会回来。</em>'
@@ -2310,6 +2360,7 @@ showEndLecturePage(0);
 }
 
 function showEndLecturePage(page){
+setLectureReadingMode(true);
 var pages = [
 '下课铃响了。\n\n学生们没有立刻离开。',
 '我拿起旧公文包，走下讲台。经过第一排时，我停了一下。\n\n<em>「别把我想得太好了，」</em>我轻声说，<em>「我只是一个理不清头发的物理学家。」</em>',
@@ -4302,6 +4353,13 @@ renderKnowledge();openPanelOverlay('knowledgeOverlay');
 }
 function closeKnowledge(){closePanelOverlay('knowledgeOverlay');}
 
+function toggleInfo(){
+var o=document.getElementById('infoOverlay');
+if(o.classList.contains('active')){closeInfo();return;}
+openPanelOverlay('infoOverlay');
+}
+function closeInfo(){closePanelOverlay('infoOverlay');}
+
 // ========== 背包系统 ==========
 function normalizeBackpackCategory(item){
 var original = item.category || '';
@@ -5430,7 +5488,7 @@ function toggleExperience(){
 var o=document.getElementById('experienceOverlay');
 if(o.classList.contains('active')){closeExperience();return;}
 // 内部测试能力「穿越未来」:首次打开能力 modal 时自动解锁
-if(!isReleaseBuild && gameState.unlockedExperiences.indexOf('future_skip')===-1){
+if(devToolsEnabled && gameState.unlockedExperiences.indexOf('future_skip')===-1){
 gameState.unlockedExperiences.push('future_skip');
 }
 renderExperiences();openPanelOverlay('experienceOverlay');
@@ -5509,7 +5567,7 @@ setL3Alarm(false);
 
 function jumpToLevel(level){
 closeExperience();
-if(isReleaseBuild) return;
+if(!devToolsEnabled) return;
 // v13z: 开发者密码门禁
 var pwd = prompt('「穿越未来」是开发者内部能力。\n\n请输入开发者密码:');
 if(pwd !== DEV_PASSWORD){
